@@ -336,15 +336,28 @@
         "use strict";
 
         const forms = document.querySelectorAll(".needs-validation");
-        const productName = document.getElementById("product-name");
-        const productPrice = document.getElementById("product-price");
+
+        let productName = document.getElementById("product-name");
+        let productPrice = document.getElementById("product-price");
+        let productCategory = document.getElementById("product-category");
+        let productDescription = document.getElementById("product-description");
+
         const symbol = /[@#{}]/;
 
         productName.addEventListener("blur", () => {
           if (productName.value.length > 10) {
             alert(
-              "perintahnya suruh kasih kalimat ini: Last Name must not exceed 25 characters."
+              "Last Name must not exceed 25 characters."
             );
+          }
+        });
+
+        productName.addEventListener("change", () => {
+          if (symbol.test(productName.value)) {
+            productName.setCustomValidity("invalid");
+            alert("Name must not contain symbols.");
+          }else {
+            productName.setCustomValidity("");
           }
         });
 
@@ -352,7 +365,6 @@
           form.addEventListener(
             "submit",
             (event) => {
-              console.log(productName);
               if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -361,16 +373,11 @@
                   productPrice.value.length < 1
                 ) {
                   alert("Please enter a valid Product name or Product price.");
-                } else {
+                } else if (productCategory.value.length < 1 || productDescription.value.length < 1) { 
                   alert("The xxx field must be filled in");
                 }
-              } else if (symbol.test(productName.value)) {
-                event.preventDefault();
-                event.stopPropagation();
-                productName.setCustomValidity("invalid");
-                alert("Name must not contain symbols.");
               }
-
+              
               form.classList.add("was-validated");
             },
             false
